@@ -18,8 +18,6 @@ import com.social.SocialNetwork.domain.User;
 import com.social.SocialNetwork.dto.UserDTO;
 import com.social.SocialNetwork.services.UserService;
 
-
-
 @RestController
 @RequestMapping(value = "/users")
 public class UserResource {
@@ -27,18 +25,24 @@ public class UserResource {
     @Autowired
     private UserService service;
 
-    @RequestMapping(method=RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<UserDTO>> findAll() {
         List<User> list = service.findAll();
         List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
         return ResponseEntity.ok().body(listDto);
     }
 
-    @RequestMapping(value = "/{id}", method=RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<UserDTO> findById(@PathVariable String id) {
         User obj = service.findById(id);
         UserDTO objDto = new UserDTO(obj);
         return ResponseEntity.ok().body(objDto);
+    }
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<UserDTO> deleteById(@PathVariable String id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();  
     }
 
     @PostMapping
