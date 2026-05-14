@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import com.social.SocialNetwork.domain.Post;
 import com.social.SocialNetwork.domain.User;
 import com.social.SocialNetwork.dto.AuthorDTO;
+import com.social.SocialNetwork.dto.CommentDTO;
 import com.social.SocialNetwork.repository.PostRepository;
 import com.social.SocialNetwork.repository.UserRepository;
 
@@ -26,24 +27,33 @@ public class Instantiation implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");//formato de data para converter as datas dos posts
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));//configura o fuso horário para GMT
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");// formato de data para converter as datas dos posts
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"));// configura o fuso horário para GMT
 
-        userRepository.deleteAll();//deleta todos os usuários do banco de dados
-        postRepository.deleteAll();//deleta todos os posts do banco de dados
+        userRepository.deleteAll();// deleta todos os usuários do banco de dados
+        postRepository.deleteAll();// deleta todos os posts do banco de dados
 
         User maria = new User(null, "Maria Brown", "maria@gmail.com");
         User alex = new User(null, "Alex Green", "alex@gmail.com");
         User bob = new User(null, "Bob Grey", "bob@gmail.com");
 
-        userRepository.saveAll(Arrays.asList(maria, alex, bob));//salva os usuários no banco de dados
+        userRepository.saveAll(Arrays.asList(maria, alex, bob));// salva os usuários no banco de dados
 
         Post post1 = new Post(null, sdf.parse("21/03/2018"), "Partiu viagem", "Vou viajar para São Paulo. Abraços!", new AuthorDTO(maria));
         Post post2 = new Post(null, sdf.parse("22/03/2018"), "Mais um dia", "Estou trabalhando duro hoje!", new AuthorDTO(maria));
 
-        postRepository.saveAll(Arrays.asList(post1, post2));//salva os posts no banco de dados
-        maria.getPosts().addAll(Arrays.asList(post1, post2));//adiciona os posts aos usuários
-        userRepository.save(maria);//atualiza os usuários no banco de dados
+        CommentDTO c1 = new CommentDTO("Boa viagem mano!", sdf.parse("21/03/2018"), new AuthorDTO(alex));
+        CommentDTO c2 = new CommentDTO("Aproveite!", sdf.parse("22/03/2018"), new AuthorDTO(bob));
+        CommentDTO c3 = new CommentDTO("Tenha um ótimo dia!", sdf.parse("23/03/2018"), new AuthorDTO(alex));
+
+        post1.getComments().addAll(Arrays.asList(c1, c2));// adiciona os comentários aos posts
+        post2.getComments().addAll(Arrays.asList(c3));
+        
+        postRepository.saveAll(Arrays.asList(post1, post2));// salva os posts no banco de dados
+        
+        maria.getPosts().addAll(Arrays.asList(post1, post2));// adiciona os posts aos usuários
+        userRepository.save(maria);// atualiza os usuários no banco de dados
+
     }
 
 }
