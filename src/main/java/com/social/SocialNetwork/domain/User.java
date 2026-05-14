@@ -1,11 +1,14 @@
 package com.social.SocialNetwork.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "users")
+@Document(collection = "users")//collection = "users" para definir o nome da coleção no MongoDB
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -14,6 +17,13 @@ public class User implements Serializable {
     private String id;
     private String name;
     private String email;
+
+    @DBRef(lazy = true)//lazy = true para carregar os posts somente quando for necessário
+    private List<Post> posts = new ArrayList<>();
+
+    public List<Post> getPosts() {
+    return posts;
+    }
 
     public User() {
 

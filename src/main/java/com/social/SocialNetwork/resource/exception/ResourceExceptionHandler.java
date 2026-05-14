@@ -13,10 +13,9 @@ import jakarta.servlet.http.HttpServletRequest;
 public class ResourceExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
-    public ResponseEntity<StandardError> ObjectNotFound(ObjectNotFoundException e, HttpServletRequest request) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Not found", e.getMessage(),
-                request.getRequestURI());
+    public ResponseEntity<StandardError> ObjectNotFound(ObjectNotFoundException e, HttpServletRequest request) {//método para tratar a exceção de objeto não encontrado
+        HttpStatus status = HttpStatus.NOT_FOUND;//status HTTP 404 para indicar que o recurso não foi encontrado
+        StandardError err = new StandardError(System.currentTimeMillis(), status.value(), "Not found", e.getMessage(), request.getRequestURI());//cria um objeto StandardError com as informações da exceção
         return ResponseEntity.status(status).body(err);
     }
 

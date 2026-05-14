@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.social.SocialNetwork.dto.AuthorDTO;
 
-@Document(value = "posts")
+@Document(value = "posts")//value = "posts" para definir o nome da coleção no MongoDB
 public class Post implements Serializable {
     private static final long serialVersionUID = 1L;
 

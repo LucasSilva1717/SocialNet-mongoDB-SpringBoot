@@ -26,27 +26,27 @@ public class UserResource {
     private UserService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public ResponseEntity<List<UserDTO>> findAll() {
+    public ResponseEntity<List<UserDTO>> findAll() {//método para buscar todos os usuários
         List<User> list = service.findAll();
         List<UserDTO> listDto = list.stream().map(x -> new UserDTO(x)).collect(Collectors.toList());
         return ResponseEntity.ok().body(listDto);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ResponseEntity<UserDTO> findById(@PathVariable String id) {
+    public ResponseEntity<UserDTO> findById(@PathVariable String id) {//método para buscar um usuário por id
         User obj = service.findById(id);
         UserDTO objDto = new UserDTO(obj);
         return ResponseEntity.ok().body(objDto);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<UserDTO> deleteById(@PathVariable String id) {
+    public ResponseEntity<UserDTO> deleteById(@PathVariable String id) {//método para deletar um usuário por id
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> insert(@RequestBody UserDTO objDTO) {
+    public ResponseEntity<UserDTO> insert(@RequestBody UserDTO objDTO) {//método para inserir um novo usuário
         User obj = service.fromDTO(objDTO);
         obj = service.insert(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
@@ -54,7 +54,7 @@ public class UserResource {
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-    public ResponseEntity<UserDTO> update(@RequestBody UserDTO objDTO, @PathVariable String id) {
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO objDTO, @PathVariable String id) {//método para atualizar um usuário por id
         User obj = service.fromDTO(objDTO);
         obj = service.update(obj);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
